@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TabFinder;
-using System;
+using SpotifyAPI.Web;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TabFinder.Tests
@@ -8,10 +8,35 @@ namespace TabFinder.Tests
     [TestClass()]
     public class SpotifyTests
     {
+        // Replace at start of each test session, will expire
+        string accessToken = "";
+        Spotify spotify;
+
+        [TestInitialize]
+        public void Reset()
+        {
+            spotify = new Spotify(accessToken);
+        }
+
         [TestMethod()]
         public async Task CheckAuthTest()
         {
-            await Spotify.CheckAuth();
+            await spotify.CheckAuth();
+        }
+
+        [TestMethod()]
+        public async Task GetPlaylistTracksTest()
+        {
+            string playlist = "6CTQqiCeDeJVmpfoUhLug3";
+            List<FullTrack> trackStrings = await spotify.GetPlaylistTracks(playlist);
+            Assert.AreEqual(2, trackStrings.Count);
+        }
+
+        [TestMethod()]
+        public async Task GetLibraryTracksTest()
+        {
+            List<FullTrack> trackStrings = await spotify.GetLibraryTracks();
+            Assert.IsTrue(trackStrings.Count > 1000);
         }
     }
 }
