@@ -21,27 +21,27 @@ namespace TabFinder
             Console.WriteLine(track.Name);
         }
 
-        public async Task<List<FullTrack>> GetPlaylistTracks(string playlist)
+        public async Task<List<BasicSong>> GetPlaylistTracks(string playlist)
         {
-            List<FullTrack> final = new List<FullTrack>();
+            List<BasicSong> final = new List<BasicSong>();
             Paging<PlaylistTrack<IPlayableItem>> firstPage = await this.spotify.Playlists.GetItems(playlist);
             await foreach (var item in spotify.Paginate(firstPage))
             {
                 if (item.Track is FullTrack track)
                 {
-                    final.Add(track);
+                    final.Add(new BasicSong(track.Artists[0].Name, track.Name, track.Album.Name));
                 }
             }
             return final;
         }
 
-        public async Task<List<FullTrack>> GetLibraryTracks()
+        public async Task<List<BasicSong>> GetLibraryTracks()
         {
-            List<FullTrack> final = new List<FullTrack>();
+            List<BasicSong> final = new List<BasicSong>();
             Paging<SavedTrack> firstPage = await this.spotify.Library.GetTracks();
             await foreach (var item in spotify.Paginate(firstPage))
             {
-                final.Add(item.Track);
+                final.Add(new BasicSong(item.Track.Artists[0].Name, item.Track.Name, item.Track.Album.Name));
             }
             return final;
         }

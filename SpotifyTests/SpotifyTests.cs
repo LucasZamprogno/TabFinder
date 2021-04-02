@@ -28,14 +28,14 @@ namespace TabFinder.Tests
         public async Task GetPlaylistTracksTest()
         {
             string playlist = "6CTQqiCeDeJVmpfoUhLug3";
-            List<FullTrack> trackStrings = await spotify.GetPlaylistTracks(playlist);
+            List<BasicSong> trackStrings = await spotify.GetPlaylistTracks(playlist);
             Assert.AreEqual(2, trackStrings.Count);
         }
 
         [TestMethod()]
         public async Task GetLibraryTracksTest()
         {
-            List<FullTrack> trackStrings = await spotify.GetLibraryTracks();
+            List<BasicSong> trackStrings = await spotify.GetLibraryTracks();
             Assert.IsTrue(trackStrings.Count > 1000);
         }
     }
