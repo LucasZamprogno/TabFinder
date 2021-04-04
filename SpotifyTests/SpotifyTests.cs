@@ -13,7 +13,7 @@ namespace TabFinder.Tests
         Spotify spotify;
 
         [TestInitialize]
-        public void Reset()
+        public void Init()
         {
             spotify = new Spotify(accessToken);
         }
