@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
@@ -7,7 +8,8 @@ namespace TabFinder
 {
     public class UGScraper
     {
-        private static string baseURL = "https://www.ultimate-guitar.com/search.php?search_type=title&value=";
+        private static readonly string baseURL = "https://www.ultimate-guitar.com/search.php?search_type=title&value=";
+        private static readonly string DIR_NAME = "tabs";
         private ChromeDriver browser;
         public UGScraper()
         {
@@ -27,6 +29,7 @@ namespace TabFinder
         }
         public List<UGTab> GetAllTabs(List<BasicSong> allTracks, UGType type)
         {
+            Directory.CreateDirectory(DIR_NAME);
             Console.WriteLine($"Getting {allTracks.Count} tabs");
             List<UGTab> tabs = new List<UGTab>();
             try
@@ -41,10 +44,13 @@ namespace TabFinder
                     if (bestCandidate == null)
                     {
                         Console.WriteLine($"No tab found for {fullTrack}");
+                        File.AppendAllText($"{DIR_NAME}/NOT_FOUND.txt", fullTrack);
                     }
                     else
                     {
-                        tabs.Add(this.GetTab(bestCandidate));
+                        UGTab tab = this.GetTab(bestCandidate);
+                        tabs.Add(tab);
+                        File.WriteAllText($"{DIR_NAME}/{this.FileSafeFileName(tab)}", tab.tab);
                     }
                 }
                 browser.Quit();
@@ -84,6 +90,16 @@ namespace TabFinder
                     searchResult.rating,
                     searchResult.numRatings,
                     tab);
+        }
+
+        private string FileSafeFileName(UGTab tab)
+        {
+            string fileName = $"{tab.artist} - {tab.title}({tab.rating}star).txt";
+            foreach (var c in Path.GetInvalidFileNameChars()) 
+            { 
+                fileName = fileName.Replace(c, '-'); 
+            }
+            return fileName;
         }
     }
 }

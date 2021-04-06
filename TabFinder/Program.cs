@@ -7,7 +7,6 @@ namespace TabFinder
 {
     class Program
     {
-        private static readonly string DIR_NAME = "tabs";
         static async Task Main(string[] args)
         {
             if (args.Length < 2)
@@ -19,10 +18,8 @@ namespace TabFinder
             List<BasicSong> tracks = await spotify.GetPlaylistTracks(args[1]);
             UGScraper scraper = new UGScraper();
             List<UGTab> tabs = scraper.GetAllTabs(tracks, UGType.Bass);
-            Directory.CreateDirectory(DIR_NAME);
             foreach (UGTab tab in tabs)
             {
-                File.WriteAllText($"{DIR_NAME}/{tab.artist} - {tab.title}.txt", tab.tab);
             }
         }
     }

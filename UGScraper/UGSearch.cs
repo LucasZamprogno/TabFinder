@@ -11,21 +11,24 @@ namespace TabFinder
         {
             List<IWebElement> asList = new List<IWebElement>(divList);
             List<UGSearchResult> all = new List<UGSearchResult>();
-            asList.RemoveAt(0); // Remove header
-            string currentArtist = "";
-            foreach (IWebElement div in asList)
+            if (asList.Count != 0)
             {
-                string artistMaybe = div.FindElements(By.XPath("./*"))[0].Text.Trim();
-                if (artistMaybe.Length > 0)
+                asList.RemoveAt(0); // Remove header
+                string currentArtist = "";
+                foreach (IWebElement div in asList)
                 {
-                    currentArtist = artistMaybe;
+                    string artistMaybe = div.FindElements(By.XPath("./*"))[0].Text.Trim();
+                    if (artistMaybe.Length > 0)
+                    {
+                        currentArtist = artistMaybe;
+                    }
+                    if (!UGSearchResult.PaidOnly(div))
+                    {
+                        all.Add(new UGSearchResult(currentArtist, div));
+                    }
                 }
-                if (!UGSearchResult.PaidOnly(div))
-                {
-                    all.Add(new UGSearchResult(currentArtist, div));
-                }
+                all.Sort(HumanRankReviews);
             }
-            all.Sort(HumanRankReviews);
             this.allResults = all;
         }
 
