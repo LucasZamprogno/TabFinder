@@ -44,7 +44,7 @@ namespace TabFinder
                     if (bestCandidate == null)
                     {
                         Console.WriteLine($"No tab found for {fullTrack}");
-                        File.AppendAllText($"{DIR_NAME}/NOT_FOUND.txt", fullTrack);
+                        File.AppendAllText($"{DIR_NAME}/NOT_FOUND.txt", fullTrack + "\n");
                     }
                     else
                     {
