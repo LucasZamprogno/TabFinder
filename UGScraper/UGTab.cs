@@ -4,10 +4,10 @@
     {
         public string artist { get; }
         public string title { get; }
-        public int? rating { get; }
+        public double? rating { get; }
         public int? numRatings { get; }
         public string tab { get; }
-        public UGTab(string artist, string title, int? rating, int? numRatings, string tab)
+        public UGTab(string artist, string title, double? rating, int? numRatings, string tab)
         {
             this.artist = artist;
             this.title = title;
